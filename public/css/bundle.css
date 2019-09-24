@@ -1,0 +1,17 @@
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+#player {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5em;
+  margin-bottom: 5em;
+}
+
+#queue {
+  font-weight: bold;
+  text-align: center;
+  text-transform: uppercase;
+}

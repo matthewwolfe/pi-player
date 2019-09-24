@@ -1,0 +1,26 @@
+{
+  "name": "pi-player",
+  "version": "0.0.1",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "compile": "gulp compile",
+    "open": "opener http://localhost:3000",
+    "server": "node ./src/index.js",
+    "start": "concurrently \"npm run server\" \"npm run open\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Matthew Wolfe",
+  "license": "MIT",
+  "dependencies": {
+    "concurrently": "^4.1.2",
+    "express": "^4.17.1",
+    "ws": "^7.1.2",
+    "youtube-player": "^5.5.2"
+  },
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-concat": "^2.6.1",
+    "opener": "^1.5.1"
+  }
+}
