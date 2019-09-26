@@ -56,6 +56,10 @@ function onPlayerStateChange(event) {
 function playNext() {
   queue.shift();
 
+  if (socket) {
+    socket.send(JSON.stringify({type: 'REMOVE', index: 0}));
+  }
+
   if (queue.length) {
     player.loadVideoById(queue[0], 0, 'large');
   }
