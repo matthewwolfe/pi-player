@@ -17,6 +17,7 @@ function initializeApp() {
       case 'ADD': {
         const { videoId } = message;
         queue.push(videoId);
+        console.log(`song added with videoId: ${videoId}`);
 
         renderQueue();
 

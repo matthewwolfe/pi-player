@@ -1,0 +1,33 @@
+body {
+  font-family: 'Roboto', sans-serif;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 3em;
+  padding: 1em;
+}
+
+#search-input {
+  border: 1px solid #333;
+  font-size: 1.25em;
+  outline: none;
+  padding: 1em;
+  width: 100%;
+}
+
+#results {
+  margin-top: 3em;
+}
+
+#results .result {
+  background-color: #fefefe;
+  border: 1px solid #333;
+  cursor: pointer;
+  font-size: 1.25em;
+  margin-bottom: 1em;
+  padding: 1.5em;
+}
+#results .result:hover {
+  background-color: #333;
+  color: #fff;
+}

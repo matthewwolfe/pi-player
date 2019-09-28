@@ -8,28 +8,36 @@ function start() {
   var socket = null;
   var queue = [];
 
-  server.use(express.urlencoded());
+  server.use(express.urlencoded({ extended: true }));
+  server.use(express.json());
 
-  server.get('/bundle.js', (req, res) => {
-    res.sendFile(path.resolve(__dirname + '/../../dist/bundle.js'));
+  server.get('/*.js', (req, res) => {
+    res.sendFile(path.resolve(__dirname + `/../../dist/${req.originalUrl.replace('/', '')}`));
   });
 
-  server.get('/bundle.css', (req, res) => {
-    res.sendFile(path.resolve(__dirname + '/../../public/css/bundle.css'));
+  server.get('/*.css', (req, res) => {
+    res.sendFile(path.resolve(__dirname + `/../../public/css/${req.originalUrl.replace('/', '')}`));
+
+  });
+
+  server.get('/search', (req, res) => {
+    res.sendFile(path.resolve(__dirname + '/../../public/search.html'));
   });
 
   server.get('/*', (req, res) => {
-    res.sendFile(path.resolve(__dirname + '/../../public/index.html'));
-  })
+    res.sendFile(path.resolve(__dirname + '/../../public/queue.html'));
+  });
 
   server.post('/add', (req, res) => {
     const videoId = req.body.videoId;
 
-    if (socket) {
+    console.log(req.body);
+
+    if (socket && videoId) {
       queue.push(videoId);
       socket.send(JSON.stringify({type: 'ADD', videoId: videoId}));
       res.json({message: 'Successfully added song to the queue'});
-      console.log('song added to queue');
+      console.log(`song added to queue with id: ${videoId}`);
     }
     else {
       res.json({message: 'Unable to add song to the queue'});
