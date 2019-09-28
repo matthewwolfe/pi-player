@@ -4,8 +4,6 @@ const replace = require('gulp-replace');
 
 require('dotenv').config();
 
-console.log(process.env);
-
 gulp.task('compile-queue', function() {
   return gulp.src('./src/frontend/queue/**/*.js')
     .pipe(concat('queue.js'))
