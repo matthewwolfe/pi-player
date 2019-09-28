@@ -7,6 +7,27 @@ body {
   padding: 1em;
 }
 
+#success-message {
+  background-color: #41C078;
+  border-radius: 4px;
+  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+  color: #fff;
+  font-size: 1.25em;
+  font-weight: 700;
+  left: 0;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 300px;
+  padding: 1em;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  top: 25%;
+  text-transform: uppercase;
+  visibility: hidden;
+  width: 50%;
+}
+
 #search-input {
   border: 1px solid #333;
   font-size: 1.25em;

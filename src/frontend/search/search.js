@@ -13,6 +13,16 @@ function addToQueue(videoId) {
   axios.post('http://localhost:3000/add', {
     videoId: videoId
   });
+
+  showSuccessMessage();
+}
+
+function showSuccessMessage() {
+  document.getElementById('success-message').style.visibility = 'visible';
+
+  setTimeout(() => {
+    document.getElementById('success-message').style.visibility = 'hidden';
+  }, 2000);
 }
 
 function search(query) {
