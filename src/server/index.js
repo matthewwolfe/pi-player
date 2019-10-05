@@ -1,4 +1,6 @@
+const { exec } = require('child_process');
 const express = require('express');
+const fs = require('fs');
 const path = require('path');
 const ws = require('ws');
 
@@ -34,7 +36,9 @@ function start() {
     console.log(req.body);
 
     if (socket && videoId) {
+      downloadMp3(videoId);
       queue.push(videoId);
+
       socket.send(JSON.stringify({type: 'ADD', videoId: videoId}));
       res.json({message: 'Successfully added song to the queue'});
       console.log(`song added to queue with id: ${videoId}`);
@@ -70,6 +74,21 @@ function start() {
         }
       }
     });
+  });
+}
+
+function downloadMp3(videoId) {
+  const url = `http://www.youtube.com/watch?v=${videoId}`;
+
+  exec(`youtube-dl --output './music/${videoId} - %(title)s.%(ext)s' --extract-audio --audio-format mp3 ${url}`, (err, stdout, stderr) => {
+    if (err) {
+      // node couldn't execute the command
+      return;
+    }
+
+    // the *entire* stdout and stderr (buffered)
+    console.log(`stdout: ${stdout}`);
+    console.log(`stderr: ${stderr}`);
   });
 }
 

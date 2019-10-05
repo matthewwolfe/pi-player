@@ -7,7 +7,7 @@
     "compile": "gulp compile",
     "open": "opener http://localhost:3000",
     "server": "node ./src/index.js",
-    "start": "concurrently \"npm run server\" \"npm run open\"",
+    "start": "concurrently \"npm run server\" \"npm run compile && npm run open\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Matthew Wolfe",
