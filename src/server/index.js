@@ -22,19 +22,11 @@ function start() {
     console.log(req.body);
 
     if (socket && videoId) {
-      downloader.download(videoId).then(() => {
-        const fileName = music.getFileByVideoId(videoId);
+      queue.push(videoId);
 
-        console.log(fileName);
-
-        if (fileName) {
-          queue.push(videoId);
-
-          socket.send(JSON.stringify({type: 'ADD', videoId: videoId, fileName: fileName}));
-          res.json({message: 'Successfully added song to the queue'});
-          console.log(`song added to queue with id: ${videoId}`);
-        }
-      });
+      socket.send(JSON.stringify({type: 'ADD', videoId: videoId}));
+      res.json({message: 'Successfully added song to the queue'});
+      console.log(`song added to queue with id: ${videoId}`);
     }
     else {
       res.json({message: 'Unable to add song to the queue'});
