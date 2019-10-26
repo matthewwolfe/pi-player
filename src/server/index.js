@@ -1,8 +1,10 @@
-const { exec } = require('child_process');
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const ws = require('ws');
+const downloader = require('./downloader');
+const music = require('./music');
+const router = require('./router');
 
 
 function start() {
@@ -12,23 +14,7 @@ function start() {
 
   server.use(express.urlencoded({ extended: true }));
   server.use(express.json());
-
-  server.get('/*.js', (req, res) => {
-    res.sendFile(path.resolve(__dirname + `/../../dist/${req.originalUrl.replace('/', '')}`));
-  });
-
-  server.get('/*.css', (req, res) => {
-    res.sendFile(path.resolve(__dirname + `/../../public/css/${req.originalUrl.replace('/', '')}`));
-
-  });
-
-  server.get('/search', (req, res) => {
-    res.sendFile(path.resolve(__dirname + '/../../public/search.html'));
-  });
-
-  server.get('/*', (req, res) => {
-    res.sendFile(path.resolve(__dirname + '/../../public/queue.html'));
-  });
+  router.addStaticRoutes(server);
 
   server.post('/add', (req, res) => {
     const videoId = req.body.videoId;
@@ -36,12 +22,19 @@ function start() {
     console.log(req.body);
 
     if (socket && videoId) {
-      downloadMp3(videoId);
-      queue.push(videoId);
+      downloader.download(videoId).then(() => {
+        const fileName = music.getFileByVideoId(videoId);
 
-      socket.send(JSON.stringify({type: 'ADD', videoId: videoId}));
-      res.json({message: 'Successfully added song to the queue'});
-      console.log(`song added to queue with id: ${videoId}`);
+        console.log(fileName);
+
+        if (fileName) {
+          queue.push(videoId);
+
+          socket.send(JSON.stringify({type: 'ADD', videoId: videoId, fileName: fileName}));
+          res.json({message: 'Successfully added song to the queue'});
+          console.log(`song added to queue with id: ${videoId}`);
+        }
+      });
     }
     else {
       res.json({message: 'Unable to add song to the queue'});
@@ -60,7 +53,14 @@ function start() {
     console.log('connected');
 
     if (queue.length > 0) {
-      queue.forEach(videoId => websocket.send(JSON.stringify({type: 'ADD', videoId: videoId})));
+      queue.forEach(videoId => {
+        const fileName = music.getFileByVideoId(videoId);
+
+        if (fileName) {
+
+        }
+        websocket.send(JSON.stringify({type: 'ADD', fileName: fileName, videoId: videoId}));
+      });
     }
 
     websocket.on('message', (message) => {
@@ -74,21 +74,6 @@ function start() {
         }
       }
     });
-  });
-}
-
-function downloadMp3(videoId) {
-  const url = `http://www.youtube.com/watch?v=${videoId}`;
-
-  exec(`youtube-dl --output './music/${videoId} - %(title)s.%(ext)s' --extract-audio --audio-format mp3 ${url}`, (err, stdout, stderr) => {
-    if (err) {
-      // node couldn't execute the command
-      return;
-    }
-
-    // the *entire* stdout and stderr (buffered)
-    console.log(`stdout: ${stdout}`);
-    console.log(`stderr: ${stderr}`);
   });
 }
 

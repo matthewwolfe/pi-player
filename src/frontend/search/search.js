@@ -10,7 +10,7 @@ searchInput.addEventListener('keypress', function (e) {
 });
 
 function addToQueue(videoId) {
-  axios.post('http://localhost:3000/add', {
+  axios.post(`http://${window.location.hostname}:3000/add`, {
     videoId: videoId
   });
 

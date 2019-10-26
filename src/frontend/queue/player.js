@@ -8,16 +8,16 @@ function onYouTubeIframeAPIReady() {
 }
 
 function initializeApp() {
-  socket = new WebSocket("ws://localhost:3001");
+  socket = new WebSocket(`ws://${window.location.hostname}:3001`);
 
   socket.onmessage = (message) => {
     message = JSON.parse(message.data);
 
     switch (message.type) {
       case 'ADD': {
-        const { videoId } = message;
+        const { fileName, videoId } = message;
         queue.push(videoId);
-        console.log(`song added with videoId: ${videoId}`);
+        console.log(`song added with videoId: ${videoId}, fileName: ${fileName}`);
 
         renderQueue();
 
